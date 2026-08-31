@@ -1,0 +1,13 @@
+{
+  "name": "cardano-kuber-skills",
+  "owner": {
+    "name": "Cardano Kuber contributors"
+  },
+  "plugins": [
+    {
+      "name": "cardano-kuber",
+      "description": "Aiken and Plutus learning skills with hosted Kuber compilation.",
+      "source": "./plugins/cardano-kuber"
+    }
+  ]
+}

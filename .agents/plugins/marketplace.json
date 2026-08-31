@@ -1,0 +1,20 @@
+{
+  "name": "cardano-kuber-skills",
+  "interface": {
+    "displayName": "Cardano Kuber Skills"
+  },
+  "plugins": [
+    {
+      "name": "cardano-kuber",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cardano-kuber"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
