@@ -1,0 +1,36 @@
+{
+  "name": "cardano-kuber",
+  "version": "0.1.0",
+  "description": "Learn, write, and compile Aiken or Plutus contracts through hosted Kuber compilers.",
+  "author": {
+    "name": "Cardano Kuber contributors"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["cardano", "aiken", "plutus", "smart-contracts", "mcp"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Cardano Kuber",
+    "shortDescription": "Write and compile Cardano contracts",
+    "longDescription": "Guided Aiken and Plutus contract authoring with compilation through hosted Kuber compiler services.",
+    "developerName": "Cardano Kuber contributors",
+    "category": "Developer Tools",
+    "capabilities": ["Contract authoring", "Hosted compilation"],
+    "defaultPrompt": [
+      "Help me design and compile an Aiken validator.",
+      "Help me design and compile a Plutus validator."
+    ]
+  },
+  "mcpServers": {
+    "kuber": {
+      "command": "node",
+      "args": ["./dist/kuber-mcp.mjs"],
+      "cwd": ".",
+      "env_vars": [
+        "KUBERIDE_API_KEY",
+        "AIKEN_COMPILER_URL",
+        "COMPILER_URL",
+        "MESH_NETWORK_ID"
+      ]
+    }
+  }
+}

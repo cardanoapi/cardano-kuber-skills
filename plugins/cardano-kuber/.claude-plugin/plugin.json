@@ -1,0 +1,10 @@
+{
+  "name": "cardano-kuber",
+  "version": "0.1.0",
+  "description": "Learn, write, and compile Aiken or Plutus contracts through hosted Kuber compilers.",
+  "author": {
+    "name": "Cardano Kuber contributors"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["cardano", "aiken", "plutus", "smart-contracts", "mcp"]
+}
