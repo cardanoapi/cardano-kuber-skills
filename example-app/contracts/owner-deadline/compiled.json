@@ -1,0 +1,115 @@
+{
+  "status": "ready",
+  "language": "aiken",
+  "nativeArtifact": {
+    "preamble": {
+      "title": "kuber/owner-deadline",
+      "version": "0.0.0",
+      "plutusVersion": "v3",
+      "compiler": {
+        "name": "Aiken",
+        "version": "v1.1.23+8949565"
+      }
+    },
+    "validators": [
+      {
+        "title": "owner_deadline.owner_deadline.spend",
+        "datum": {
+          "title": "datum",
+          "schema": {
+            "$ref": "#/definitions/owner_deadline~1Datum"
+          }
+        },
+        "redeemer": {
+          "title": "_redeemer",
+          "schema": {
+            "$ref": "#/definitions/owner_deadline~1Redeemer"
+          }
+        },
+        "compiledCode": "59012f01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006264b3001323322330020020012259800800c528456600266e3cdd71808800801c528c4cc008008c04800500d20203758601e60206020602060206020602060206020601a6ea8018dd7180718061baa0018992cc004cdc3a400460186ea8006266e24dd69807980818069baa002375a601e601a6ea8006294100b180718061baa300e300c3754601c601e601e601e601e601e601e601e60186ea8016294100a180698059baa0018b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+        "hash": "7016fdd35618802c1e9823e36949e5015f6d7a29e71262f55f6b7153"
+      },
+      {
+        "title": "owner_deadline.owner_deadline.else",
+        "redeemer": {
+          "schema": {}
+        },
+        "compiledCode": "59012f01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006264b3001323322330020020012259800800c528456600266e3cdd71808800801c528c4cc008008c04800500d20203758601e60206020602060206020602060206020601a6ea8018dd7180718061baa0018992cc004cdc3a400460186ea8006266e24dd69807980818069baa002375a601e601a6ea8006294100b180718061baa300e300c3754601c601e601e601e601e601e601e601e60186ea8016294100a180698059baa0018b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+        "hash": "7016fdd35618802c1e9823e36949e5015f6d7a29e71262f55f6b7153"
+      }
+    ],
+    "definitions": {
+      "Int": {
+        "dataType": "integer"
+      },
+      "aiken/crypto/VerificationKeyHash": {
+        "title": "VerificationKeyHash",
+        "dataType": "bytes"
+      },
+      "owner_deadline/Datum": {
+        "title": "Datum",
+        "anyOf": [
+          {
+            "title": "Datum",
+            "dataType": "constructor",
+            "index": 0,
+            "fields": [
+              {
+                "title": "owner",
+                "$ref": "#/definitions/aiken~1crypto~1VerificationKeyHash"
+              },
+              {
+                "title": "deadline",
+                "$ref": "#/definitions/Int"
+              }
+            ]
+          }
+        ]
+      },
+      "owner_deadline/Redeemer": {
+        "title": "Redeemer",
+        "anyOf": [
+          {
+            "title": "Unlock",
+            "dataType": "constructor",
+            "index": 0,
+            "fields": []
+          }
+        ]
+      }
+    }
+  },
+  "scripts": [
+    {
+      "hash": "7016fdd35618802c1e9823e36949e5015f6d7a29e71262f55f6b7153",
+      "language": "aiken",
+      "plutusVersion": "v3",
+      "compiledCode": "59012f01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006264b3001323322330020020012259800800c528456600266e3cdd71808800801c528c4cc008008c04800500d20203758601e60206020602060206020602060206020601a6ea8018dd7180718061baa0018992cc004cdc3a400460186ea8006266e24dd69807980818069baa002375a601e601a6ea8006294100b180718061baa300e300c3754601c601e601e601e601e601e601e601e60186ea8016294100a180698059baa0018b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+      "title": "owner_deadline.owner_deadline",
+      "moduleName": "owner_deadline",
+      "validatorName": "owner_deadline",
+      "entryPoints": [
+        "spend",
+        "else"
+      ],
+      "parameters": [],
+      "status": "ready",
+      "parameterized": false,
+      "diagnostics": [],
+      "meshjs": {
+        "code": "59013259012f01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006264b3001323322330020020012259800800c528456600266e3cdd71808800801c528c4cc008008c04800500d20203758601e60206020602060206020602060206020601a6ea8018dd7180718061baa0018992cc004cdc3a400460186ea8006266e24dd69807980818069baa002375a601e601a6ea8006294100b180718061baa300e300c3754601c601e601e601e601e601e601e601e60186ea8016294100a180698059baa0018b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+        "version": "V3",
+        "format": "meshjs"
+      },
+      "validation": {
+        "status": "valid",
+        "hashMatch": true,
+        "canonicalHash": "7016fdd35618802c1e9823e36949e5015f6d7a29e71262f55f6b7153",
+        "meshjsDerivedHash": "7016fdd35618802c1e9823e36949e5015f6d7a29e71262f55f6b7153",
+        "address": "addr_test1wpcpdlwn2cvgqtq7nq37x62fu5q47mt698n3ych4ta4hz5cttdc2n",
+        "networkId": 0
+      }
+    }
+  ],
+  "diagnostics": []
+}

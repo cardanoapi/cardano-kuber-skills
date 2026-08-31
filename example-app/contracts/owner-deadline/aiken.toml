@@ -1,0 +1,8 @@
+name = "kuber/owner-deadline"
+version = "0.0.0"
+plutus = "v3"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "v3.1.0"
+source = "github"

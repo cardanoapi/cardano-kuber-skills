@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "kuber": {
+      "type": "stdio",
+      "command": "node",
+      "cwd": "${workspaceFolder}",
+      "args": [
+        "${workspaceFolder}/../plugins/cardano-kuber/dist/kuber-mcp.mjs"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    }
+  }
+}
