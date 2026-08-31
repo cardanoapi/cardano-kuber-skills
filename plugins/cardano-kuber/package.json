@@ -1,0 +1,24 @@
+{
+  "name": "cardano-kuber-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@11.1.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=11"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "check": "pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "esbuild": "0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^3.2.4"
+  }
+}

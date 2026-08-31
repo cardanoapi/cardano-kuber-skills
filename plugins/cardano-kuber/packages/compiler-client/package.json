@@ -1,0 +1,21 @@
+{
+  "name": "@kuber/compiler-client",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Hosted Aiken and Plutus compiler clients",
+  "exports": {
+    ".": "./src/interface.ts"
+  },
+  "scripts": {
+    "test": "node --test 'src/**/*.test.ts'",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@kuber/script-artifact": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
+}

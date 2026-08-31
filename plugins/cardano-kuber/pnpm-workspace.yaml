@@ -1,0 +1,7 @@
+packages:
+  - mcp
+  - packages/*
+
+allowBuilds:
+  chacha-native: false
+  esbuild: true
