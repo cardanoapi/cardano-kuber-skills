@@ -114,7 +114,7 @@ describe("readCompileStream", () => {
   });
 
   it("strips the leading space the deployed compiler puts on the hash", async () => {
-    // Not hypothetical: compiler.cardanoapi.io returns " 3a888d65..." (57 chars).
+    // The deployed compiler has returned " 3a888d65..." (57 chars).
     // A padded hash breaks comparisons and script address derivation downstream.
     const padded = JSON.stringify({
       hash: " 3a888d65f16790950a72daee1f63aa05add6d268434107cfa5b67712",
@@ -138,7 +138,7 @@ describe("readCompileStream", () => {
 /**
  * The log below is the live compiler's, trimmed: submitting a module named anything but
  * `Contract` fails the build and still emits a script block holding the previous
- * successful build's script. Verified against compiler.cardanoapi.io by compiling
+ * successful build's script. Verified against the deployed compiler by compiling
  * `traceError "AAAA"` as `module Contract`, then `traceError "BBBB"` as `module Wrongname`
  * and getting the AAAA script back, hash and all.
  */

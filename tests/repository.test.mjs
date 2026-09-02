@@ -1,13 +1,15 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
+import { execFile, spawn } from "node:child_process";
 import { mkdtemp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, it } from "node:test";
+import { promisify } from "node:util";
 
 const root = path.resolve(import.meta.dirname, "..");
 const pluginRoot = path.join(root, "plugins/cardano-kuber");
 const temporaryDirectories = [];
+const execFileAsync = promisify(execFile);
 
 afterEach(async () => {
   await Promise.all(
@@ -30,6 +32,18 @@ async function filesBelow(directory) {
     else result.push(absolute);
   }
   return result;
+}
+
+async function repositoryFiles() {
+  const { stdout } = await execFileAsync(
+    "git",
+    ["ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+    { cwd: root, encoding: "utf8" },
+  );
+  return stdout
+    .split("\0")
+    .filter(Boolean)
+    .map((file) => path.join(root, file));
 }
 
 function readLine(stream) {
@@ -97,7 +111,7 @@ describe("repository packaging", () => {
   });
 
   it("contains no embedded credential or old workspace path", async () => {
-    for (const file of await filesBelow(root)) {
+    for (const file of await repositoryFiles()) {
       const contents = await readFile(file);
       if (contents.includes(0)) continue;
       const text = contents.toString("utf8");

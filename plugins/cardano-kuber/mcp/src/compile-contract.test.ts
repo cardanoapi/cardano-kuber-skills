@@ -180,7 +180,11 @@ describe("compileContract", () => {
 
 		const result = await compileContract(
 			{ language: "plutus", files: { "Contract.hs": "module Contract where" } },
-			{ compilerUrl: "https://aiken.example", plutusApiKey: "test-only" },
+			{
+				compilerUrl: "https://aiken.example",
+				plutusCompilerUrl: "https://compiler.example",
+				plutusApiKey: "test-only",
+			},
 		);
 
 		assert.equal(result.status, "invalid");
@@ -198,12 +202,49 @@ describe("compileContract", () => {
 
 		const result = await compileContract(
 			{ language: "plutus", files: { "Contract.hs": "module Contract where" } },
-			{ compilerUrl: "https://aiken.example" },
+			{
+				compilerUrl: "https://aiken.example",
+				plutusCompilerUrl: "https://compiler.example",
+			},
 		);
 
 		assert.equal(calls, 0);
 		assert.equal(result.status, "unavailable");
 		assert.equal(result.diagnostics[0]?.code, "credentials_unavailable");
+	});
+
+	it("reports a missing Aiken compiler URL without making a request", async () => {
+		let calls = 0;
+		globalThis.fetch = (async () => {
+			calls++;
+			return aikenResponse({});
+		}) as typeof fetch;
+
+		const result = await compileContract(
+			{ files: { "aiken.toml": 'name = "k/hello"' } },
+			{},
+		);
+
+		assert.equal(calls, 0);
+		assert.equal(result.status, "unavailable");
+		assert.equal(result.diagnostics[0]?.code, "compiler_url_unavailable");
+	});
+
+	it("reports a missing Plutus compiler URL without making a request", async () => {
+		let calls = 0;
+		globalThis.fetch = (async () => {
+			calls++;
+			return new Response("unexpected call");
+		}) as typeof fetch;
+
+		const result = await compileContract(
+			{ language: "plutus", files: { "Contract.hs": "module Contract where" } },
+			{ plutusApiKey: "test-only" },
+		);
+
+		assert.equal(calls, 0);
+		assert.equal(result.status, "unavailable");
+		assert.equal(result.diagnostics[0]?.code, "compiler_url_unavailable");
 	});
 
 	it("rejects a project without aiken.toml without calling the compiler", async () => {
