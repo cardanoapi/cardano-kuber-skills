@@ -1,0 +1,70 @@
+{
+  "preamble": {
+    "title": "hello/world",
+    "version": "0.0.0",
+    "plutusVersion": "v3",
+    "compiler": {
+      "name": "Aiken",
+      "version": "v1.1.21+42babe5"
+    }
+  },
+  "validators": [
+    {
+      "title": "hello_world.hello_world.spend",
+      "datum": {
+        "title": "datum",
+        "schema": {
+          "$ref": "#/definitions/hello_world~1Datum"
+        }
+      },
+      "redeemer": {
+        "title": "_redeemer",
+        "schema": {
+          "$ref": "#/definitions/hello_world~1Redeemer"
+        }
+      },
+      "compiledCode": "58ab01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006266e3cdd7180698059baa300d300b37540029110d48656c6c6f2c20776f726c6421008b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+      "hash": "089409fb985470adba16f983c2a20ee38ba94880cf863e393d8b961a"
+    },
+    {
+      "title": "hello_world.hello_world.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "58ab01010029800aba2aba1aab9faab9eaab9dab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c01cdd500144c8cc896600266e1d2000300a375400d15980098059baa0068acc004cdc3a400060146ea8006266e3cdd7180698059baa300d300b37540029110d48656c6c6f2c20776f726c6421008b20128b20188b2012300b001300b300c0013008375400516401830070013003375400f149a26cac8009",
+      "hash": "089409fb985470adba16f983c2a20ee38ba94880cf863e393d8b961a"
+    }
+  ],
+  "definitions": {
+    "ByteArray": {
+      "dataType": "bytes"
+    },
+    "hello_world/Datum": {
+      "title": "Datum",
+      "anyOf": [
+        {
+          "title": "Datum",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "message",
+              "$ref": "#/definitions/ByteArray"
+            }
+          ]
+        }
+      ]
+    },
+    "hello_world/Redeemer": {
+      "title": "Redeemer",
+      "anyOf": [
+        {
+          "title": "SayHello",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": []
+        }
+      ]
+    }
+  }
+}
