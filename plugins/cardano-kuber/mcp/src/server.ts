@@ -13,20 +13,17 @@ export interface KuberMcpOptions {
 	networkId?: number;
 }
 
-const DEFAULT_COMPILER_URL = "https://kuberide.sireto.dev/aiken";
-const DEFAULT_PLUTUS_COMPILER_URL = "https://compiler.cardanoapi.io";
-
 /** Create the compiler MCP server. No transport is selected here. */
 export function createKuberMcpServer(options: KuberMcpOptions = {}): McpServer {
 	const compilerUrl = (
 		options.compilerUrl ??
 		process.env.AIKEN_COMPILER_URL ??
-		DEFAULT_COMPILER_URL
+		""
 	).replace(/\/+$/, "");
 	const plutusCompilerUrl = (
 		options.plutusCompilerUrl ??
 		process.env.COMPILER_URL ??
-		DEFAULT_PLUTUS_COMPILER_URL
+		""
 	).replace(/\/+$/, "");
 	const plutusApiKey =
 		options.plutusApiKey ?? process.env.KUBERIDE_API_KEY ?? "";

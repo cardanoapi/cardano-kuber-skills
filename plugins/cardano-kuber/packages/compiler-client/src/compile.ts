@@ -181,8 +181,8 @@ function tryParse(text: string): { hash: string; script: CompiledScript } | null
     return null;
   }
   // The deployed compiler emits the hash with a leading space (" 3a888d65..." is 57
-  // chars, not 56). Verified against compiler.cardanoapi.io. plutus-compiler-server
-  // has a commit titled "Fix prefix whitespace in script hash", so this is a known
+  // chars, not 56). The upstream compiler server has a commit titled
+  // "Fix prefix whitespace in script hash", so this is a known
   // upstream bug and the running build predates or missed the fix. The IDE never
   // noticed because it only ever prints the value. Anything comparing hashes or
   // deriving a script address would break, so normalise here rather than leaking it.

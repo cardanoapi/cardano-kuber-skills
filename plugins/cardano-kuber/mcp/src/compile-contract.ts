@@ -23,7 +23,7 @@ export interface CompileContractInput {
 }
 
 export interface CompileContractOptions {
-	compilerUrl: string;
+	compilerUrl?: string;
 	plutusCompilerUrl?: string;
 	plutusApiKey?: string;
 	networkId?: number;
@@ -88,6 +88,13 @@ async function compileAikenContract(
 			"missing_manifest",
 		);
 	}
+	if (!opts.compilerUrl) {
+		return unavailable(
+			"aiken",
+			"the Aiken compiler URL is not configured on the MCP host",
+			"compiler_url_unavailable",
+		);
+	}
 
 	let result: Awaited<ReturnType<typeof compileAiken>>;
 	try {
@@ -147,6 +154,13 @@ async function compilePlutusContract(
 			"missing_source",
 		);
 	}
+	if (!opts.plutusCompilerUrl) {
+		return unavailable(
+			"plutus",
+			"the Plutus compiler URL is not configured on the MCP host",
+			"compiler_url_unavailable",
+		);
+	}
 	if (!opts.plutusApiKey) {
 		return unavailable(
 			"plutus",
@@ -158,7 +172,7 @@ async function compilePlutusContract(
 	let result: Awaited<ReturnType<typeof compilePlutus>>;
 	try {
 		result = await compilePlutus(files[sourceTitle] ?? "", sourceTitle, {
-			compilerUrl: opts.plutusCompilerUrl ?? "https://compiler.cardanoapi.io",
+			compilerUrl: opts.plutusCompilerUrl,
 			apiKey: opts.plutusApiKey,
 			...(opts.signal ? { signal: opts.signal } : {}),
 		});

@@ -195543,6 +195543,13 @@ async function compileAikenContract(files, opts) {
       "missing_manifest"
     );
   }
+  if (!opts.compilerUrl) {
+    return unavailable(
+      "aiken",
+      "the Aiken compiler URL is not configured on the MCP host",
+      "compiler_url_unavailable"
+    );
+  }
   let result;
   try {
     result = await compileAiken(files, {
@@ -195589,6 +195596,13 @@ async function compilePlutusContract(files, title, opts) {
       "missing_source"
     );
   }
+  if (!opts.plutusCompilerUrl) {
+    return unavailable(
+      "plutus",
+      "the Plutus compiler URL is not configured on the MCP host",
+      "compiler_url_unavailable"
+    );
+  }
   if (!opts.plutusApiKey) {
     return unavailable(
       "plutus",
@@ -195599,7 +195613,7 @@ async function compilePlutusContract(files, title, opts) {
   let result;
   try {
     result = await compilePlutus(files[sourceTitle] ?? "", sourceTitle, {
-      compilerUrl: opts.plutusCompilerUrl ?? "https://compiler.cardanoapi.io",
+      compilerUrl: opts.plutusCompilerUrl,
       apiKey: opts.plutusApiKey,
       ...opts.signal ? { signal: opts.signal } : {}
     });
@@ -195720,11 +195734,9 @@ function unavailable(language, message, code) {
 }
 
 // mcp/src/server.ts
-var DEFAULT_COMPILER_URL = "https://kuberide.sireto.dev/aiken";
-var DEFAULT_PLUTUS_COMPILER_URL = "https://compiler.cardanoapi.io";
 function createKuberMcpServer(options = {}) {
-  const compilerUrl = (options.compilerUrl ?? process.env.AIKEN_COMPILER_URL ?? DEFAULT_COMPILER_URL).replace(/\/+$/, "");
-  const plutusCompilerUrl = (options.plutusCompilerUrl ?? process.env.COMPILER_URL ?? DEFAULT_PLUTUS_COMPILER_URL).replace(/\/+$/, "");
+  const compilerUrl = (options.compilerUrl ?? process.env.AIKEN_COMPILER_URL ?? "").replace(/\/+$/, "");
+  const plutusCompilerUrl = (options.plutusCompilerUrl ?? process.env.COMPILER_URL ?? "").replace(/\/+$/, "");
   const plutusApiKey = options.plutusApiKey ?? process.env.KUBERIDE_API_KEY ?? "";
   const networkId = options.networkId ?? Number(process.env.MESH_NETWORK_ID ?? "0");
   const server2 = new McpServer({ name: "kuber-mcp", version: "0.0.0" });
