@@ -10,6 +10,7 @@ node_modules/
 
 # Test, build-cache, and diagnostic output
 coverage/
+dist/
 *.tsbuildinfo
 *.log
 *.log.*

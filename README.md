@@ -13,17 +13,17 @@ Cardano node are not installed locally.
 
 ## Credentials and services
 
-Aiken compilation works with the default hosted compiler and does not require a credential.
-Plutus compilation requires `KUBERIDE_API_KEY` in the environment of the process that starts
-the MCP server. The key is host configuration, not a `compile_contract` argument.
+Aiken compilation does not require a credential. Both compiler URLs, and the Plutus API key
+when compiling Plutus, must be supplied in the environment of the process that starts the MCP
+server. These values are host configuration, not `compile_contract` arguments.
 
-Optional host environment variables:
+Host environment variables:
 
 | Variable | Purpose |
 |---|---|
 | `KUBERIDE_API_KEY` | Enables the hosted Plutus compiler |
-| `AIKEN_COMPILER_URL` | Overrides the hosted Aiken compiler base URL |
-| `COMPILER_URL` | Overrides the hosted Plutus compiler base URL |
+| `AIKEN_COMPILER_URL` | Required Aiken compiler base URL |
+| `COMPILER_URL` | Required Plutus compiler base URL |
 | `MESH_NETWORK_ID` | Selects the network ID used for derived script addresses; defaults to `0` |
 
 Keep real credentials in an untracked `.env` file or the agent host's secret settings.
@@ -50,9 +50,10 @@ The marketplace metadata lives in `.claude-plugin/marketplace.json` and
 
 ## Try the example in VS Code
 
-Open `example-app` as the VS Code workspace, copy `.env.example` to `.env`, and set
-`KUBERIDE_API_KEY` only if you want to compile Plutus. The checked-in `.vscode/mcp.json`
-starts the same bundled server distributed by both plugins.
+Open `example-app` as the VS Code workspace, copy `.env.example` to `.env`, set both compiler
+URLs, and set `KUBERIDE_API_KEY` only if you want to compile Plutus. The checked-in
+`.vscode/mcp.json` loads that private file and starts the same bundled server distributed by
+both plugins.
 
 Use one of the prompts in [example-app/PROMPTS.md](example-app/PROMPTS.md). The agent writes
 contract source under `example-app/contracts/` and either returns the complete normalized

@@ -27,9 +27,10 @@ MCP operations, and session persistence are outside this repository.
 
 ## Credential boundary
 
-Credentials are read from the MCP host environment. They are not accepted by the tool schema
-and are not forwarded by the agent as model-visible arguments. Aiken has no credential.
-Plutus returns a structured `credentials_unavailable` diagnostic when its host key is absent.
+Compiler URLs and credentials are read from the MCP host environment. They are not accepted
+by the tool schema and are not forwarded by the agent as model-visible arguments. Aiken has
+no credential. Missing URLs return `compiler_url_unavailable`; Plutus returns
+`credentials_unavailable` when its host key is absent.
 
 ## Generated bundle
 
