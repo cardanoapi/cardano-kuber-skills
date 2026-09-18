@@ -213,6 +213,51 @@ describe("compileContract", () => {
 		assert.equal(result.diagnostics[0]?.code, "credentials_unavailable");
 	});
 
+	it("returns a structured unavailable result when the Plutus compiler cannot be reached", async () => {
+		globalThis.fetch = (async () => {
+			throw new TypeError("fetch failed");
+		}) as typeof fetch;
+
+		const result = await compileContract(
+			{ language: "plutus", files: { "Contract.hs": "module Contract where" } },
+			{
+				plutusCompilerUrl: "https://compiler.example",
+				plutusApiKey: "test-only",
+			},
+		);
+
+		assert.equal(result.status, "unavailable");
+		assert.equal(result.diagnostics[0]?.code, "compiler_unavailable");
+		assert.match(result.diagnostics[0]?.message ?? "", /fetch failed/);
+	});
+
+	it("rejects a Plutus title that is not one of the Haskell candidates", async () => {
+		let calls = 0;
+		globalThis.fetch = (async () => {
+			calls++;
+			return new Response("unexpected call");
+		}) as typeof fetch;
+
+		const result = await compileContract(
+			{
+				language: "plutus",
+				title: "README.md",
+				files: {
+					"Contract.hs": "module Contract where",
+					"README.md": "not Haskell",
+				},
+			},
+			{
+				plutusCompilerUrl: "https://compiler.example",
+				plutusApiKey: "test-only",
+			},
+		);
+
+		assert.equal(calls, 0);
+		assert.equal(result.status, "invalid");
+		assert.equal(result.diagnostics[0]?.code, "missing_source");
+	});
+
 	it("reports a missing Aiken compiler URL without making a request", async () => {
 		let calls = 0;
 		globalThis.fetch = (async () => {
