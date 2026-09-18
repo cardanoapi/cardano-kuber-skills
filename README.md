@@ -28,20 +28,20 @@ Host environment variables:
 
 Keep real credentials in an untracked `.env` file or the agent host's secret settings.
 
-## Install from a published marketplace
+## Install from GitHub
 
-After this repository is published as `OWNER/cardano-kuber-skills`, Claude Code can install
-it with:
+On any device with Git and Node.js 24 or newer, Claude Code can install the plugin directly
+from the public repository:
 
 ```text
-/plugin marketplace add OWNER/cardano-kuber-skills
+/plugin marketplace add cardanoapi/cardano-kuber-skills
 /plugin install cardano-kuber@cardano-kuber-skills
 ```
 
 For Codex, add the repository marketplace and then install the plugin:
 
 ```bash
-codex plugin marketplace add /path/to/cardano-kuber-skills
+codex plugin marketplace add cardanoapi/cardano-kuber-skills --ref main
 codex plugin add cardano-kuber@cardano-kuber-skills
 ```
 
