@@ -112,7 +112,7 @@ Read every top-level and per-script diagnostic, including its `severity`, `code`
 | `unknown_plutus_version` | Report compiler metadata failure; do not rewrite valid contract logic. |
 | `meshjs_validation` | Investigate conversion or encoding; do not weaken the contract. |
 | `hash_mismatch` | Treat compiler and derived artifacts as inconsistent and unusable. |
-| `parameters_required` | Apply parameters through an appropriate supported flow, then revalidate the resulting bytes. |
+| `parameters_required` | Treat this MCP result as a non-deployable template. Source-bake final values and recompile here, or use an external parameter-application flow that also validates the resulting bytes and hash. |
 | `compiler_unavailable`, credentials, HTTP, timeout, or transport errors | Report infrastructure failure and retain the current invariant and source. |
 
 Only the source/project class starts the repair counter. Re-submit after each justified source
@@ -164,6 +164,15 @@ Compilation of this template can establish that the source builds, but applying 
 changes the script bytes, hash, policy ID, and address. A result with
 `status: "parameterized"` or `parameterized: true` is non-deployable until the intended
 parameters are applied and the final script again satisfies the three acceptance checks.
+
+The current Kuber MCP reports the parameter schema but does not apply blueprint parameters or
+validate an externally applied artifact. Use one of these explicit boundaries:
+
+- When final values are known, encode them in the Aiken source and compile again; accept only
+  the resulting unparameterized script that passes the three checks.
+- When parameters must remain external, return the compiler result only as a template and use
+  separate parameter-application tooling that independently validates the final bytes, hash,
+  policy ID, and address.
 
 ## Complete handoff
 

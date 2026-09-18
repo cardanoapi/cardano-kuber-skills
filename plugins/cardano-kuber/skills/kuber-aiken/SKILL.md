@@ -147,8 +147,12 @@ script.validation.status == "valid"
 script.validation.hashMatch == true
 ```
 
-A parameterized script is not deployable until its parameters are applied and the resulting
-script is revalidated. A successful hosted build does not establish that authored tests ran.
+The current Kuber MCP detects Aiken blueprint parameters but does not apply them. When final
+values are known, bake them into the Aiken source and recompile so the compiler emits an
+unparameterized script. Otherwise hand off the result explicitly as a non-deployable
+`parameterized` template with its parameter schema and required external application step.
+Never describe the template as ready. A successful hosted build does not establish that
+authored tests ran.
 
 Provide:
 

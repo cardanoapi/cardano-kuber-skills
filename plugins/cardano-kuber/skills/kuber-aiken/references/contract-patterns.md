@@ -419,6 +419,7 @@ rule applies only to transactions that consume this script output.
 ```text
 on Buy(buyer):
   require buyer signature
+  AND require seller and royalty recipient credentials to be distinct
   AND one identified buyer output receives exactly one listed asset
   AND one identified seller output pays required seller amount
   AND one identified royalty output pays required royalty amount
@@ -460,7 +461,8 @@ validator royalty_listing {
     when redeemer is {
       Cancel -> list.has(self.extra_signatories, listing.seller)
       Buy { buyer } ->
-        list.has(self.extra_signatories, buyer) &&
+        listing.seller != listing.royalty_recipient &&
+          list.has(self.extra_signatories, buyer) &&
           list.any(self.outputs, fn(output) {
             output.address.payment_credential ==
               VerificationKey(listing.seller) &&
@@ -495,15 +497,18 @@ validator royalty_listing {
 - Reject: a missing buyer signature or unauthorized cancellation.
 - Reject: missing or incorrect asset delivery.
 - Reject: seller or royalty underpayment.
+- Reject: seller and royalty recipient use the same credential.
 - Reject: payment to the wrong credential or in an unintended asset.
 
 **Common vulnerability prevented.** Checking only that some outputs contain enough value can
-accept payment to the wrong party, omit asset delivery, or authorize a purchase without the
-buyer.
+accept payment to the wrong party, reuse one output as both seller and royalty payment when
+the credentials coincide, omit asset delivery, or authorize a purchase without the buyer.
 
 **Adaptation points.** Choose exact or minimum payments; decide whether split outputs are
 summed; identify credentials and listed asset precisely; define marketplace fees or datum
-updates separately; add time bounds only when the listing requires them.
+updates separately; add time bounds only when the listing requires them. If the same economic
+party receives both amounts, replace these two distinct-payment rules with one explicit
+combined-payment invariant rather than allowing one output to satisfy both predicates.
 
 **Limitations and non-goals.** A spending validator can enforce a royalty only when its
 listing UTxO is consumed. It cannot enforce royalties on later off-script transfers or sales
