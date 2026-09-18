@@ -98,6 +98,11 @@ import Plutus.V2.Ledger.Contexts (txSignedBy)
 
 data MultiSig = MultiSig [PubKeyHash] Integer
 
+{-# INLINABLE allUnique #-}
+allUnique :: [PubKeyHash] -> Bool
+allUnique [] = True
+allUnique (key : rest) = not (elem key rest) && allUnique rest
+
 {-# INLINABLE signedCount #-}
 signedCount :: TxInfo -> [PubKeyHash] -> Integer
 signedCount info =
@@ -110,6 +115,7 @@ mkValidator :: MultiSig -> () -> ScriptContext -> Bool
 mkValidator (MultiSig signers threshold) _ context =
   let info = scriptContextTxInfo context
   in traceIfFalse "threshold must be positive" (threshold > 0)
+      && traceIfFalse "duplicate authorized signer" (allUnique signers)
       && traceIfFalse "threshold exceeds signer count" (threshold <= length signers)
       && traceIfFalse "not enough signatures" (signedCount info signers >= threshold)
 ```
@@ -120,19 +126,17 @@ mkValidator (MultiSig signers threshold) _ context =
 - Reject: signatures are below the threshold.
 - Reject: the threshold is zero or negative.
 - Reject: the threshold exceeds the authorized signer count.
+- Reject: the authorized signer list contains duplicate keys.
 - Reject: the datum or context cannot be decoded.
-- Reject: duplicate keys when the adapted contract requires the datum to enforce
-  distinctness.
 
 **Common vulnerability addressed.** Counting duplicate authorized entries as independent
 signers, or accepting an invalid threshold, can reduce the intended authorization strength.
 
-**Adaptation points.** Decide whether distinctness is enforced on-chain or guaranteed when
-constructing the datum; define signer-set updates; combine with time recovery only when the
-contract requires it.
+**Adaptation points.** Define how the unique signer list is populated and updated; combine
+with time recovery only when the contract requires it.
 
-**Limitations and non-goals.** The fragment assumes the signer list contains distinct keys.
-It does not implement signer rotation, weighted signatures, governance, or a deadline branch.
+**Limitations and non-goals.** The fragment rejects duplicate keys but does not implement
+signer rotation, weighted signatures, governance, or a deadline branch.
 
 ## Two-party escrow
 

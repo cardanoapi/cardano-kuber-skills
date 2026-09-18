@@ -105459,15 +105459,24 @@ var CompilerUnavailableError = class extends Error {
   }
 };
 async function compileSource(code, opts) {
-  const res = await fetch(`${opts.compilerUrl}/api/v3/compile`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "api-key": opts.apiKey
-    },
-    body: JSON.stringify({ code }),
-    ...opts.signal ? { signal: opts.signal } : {}
-  });
+  let res;
+  try {
+    res = await fetch(`${opts.compilerUrl}/api/v3/compile`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "api-key": opts.apiKey
+      },
+      body: JSON.stringify({ code }),
+      ...opts.signal ? { signal: opts.signal } : {}
+    });
+  } catch (error2) {
+    if (error2 instanceof CompilerUnavailableError) {
+      throw error2;
+    }
+    const message = error2 instanceof Error ? error2.message : String(error2);
+    throw new CompilerUnavailableError(0, `could not reach the Plutus compiler: ${message}`);
+  }
   if (!res.ok) {
     throw new CompilerUnavailableError(res.status, await res.text());
   }
@@ -195589,10 +195598,10 @@ async function compilePlutusContract(files, title, opts) {
     (file) => file.toLowerCase().endsWith(".hs")
   );
   const sourceTitle = title ?? (candidates.length === 1 ? candidates[0] : void 0);
-  if (!sourceTitle || !(sourceTitle in files)) {
+  if (!sourceTitle || !candidates.includes(sourceTitle)) {
     return invalid(
       "plutus",
-      candidates.length === 0 ? "Plutus compilation requires one .hs source file in files" : "Plutus compilation requires title when files contains multiple .hs sources",
+      candidates.length === 0 ? "Plutus compilation requires one .hs source file in files" : title ? "Plutus compilation title must identify a .hs source in files" : "Plutus compilation requires title when files contains multiple .hs sources",
       "missing_source"
     );
   }

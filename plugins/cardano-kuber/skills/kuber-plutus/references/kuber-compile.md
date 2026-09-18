@@ -86,10 +86,25 @@ data Params = Params BuiltinByteString
 
 PlutusTx.makeLift ''Params
 
+{-# INLINABLE mkValidator #-}
+mkValidator :: Params -> Datum -> Redeemer -> ScriptContext -> Bool
+mkValidator (Params expected) (Datum actual) Act _ =
+  actual == lengthOfByteString expected
+
+{-# INLINABLE wrapValidatorWithParams #-}
+wrapValidatorWithParams :: Params -> BuiltinData -> BuiltinData -> BuiltinData -> ()
+wrapValidatorWithParams params datum redeemer context =
+  check
+    (mkValidator
+      params
+      (PlutusTx.unsafeFromBuiltinData datum)
+      (PlutusTx.unsafeFromBuiltinData redeemer)
+      (PlutusTx.unsafeFromBuiltinData context))
+
 validatorFor :: Params -> Validator
 validatorFor params =
   mkValidatorScript
-    ($$(PlutusTx.compile [|| wrapValidator ||])
+    ($$(PlutusTx.compile [|| wrapValidatorWithParams ||])
       `PlutusTx.applyCode` PlutusTx.liftCode params)
 
 finalParams :: Params
@@ -98,6 +113,10 @@ finalParams = Params "REPLACE_ME"
 validator :: Validator
 validator = validatorFor finalParams
 ```
+
+The compiled function must accept `Params` as its first argument; applying `Params` to the
+three-argument `wrapValidator` shown earlier is a type error. Keep every function reachable
+from `wrapValidatorWithParams` `INLINABLE` as required by the Plutus compiler.
 
 Replace all placeholders before the final compile. A placeholder-bearing source is not ready
 for use even if the compiler returns a valid hash. The hosted Haskell compiler receives the
