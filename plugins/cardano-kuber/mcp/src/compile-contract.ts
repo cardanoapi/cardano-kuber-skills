@@ -145,12 +145,14 @@ async function compilePlutusContract(
 	// entries as Haskell modules.
 	const sourceTitle =
 		title ?? (candidates.length === 1 ? candidates[0] : undefined);
-	if (!sourceTitle || !(sourceTitle in files)) {
+	if (!sourceTitle || !candidates.includes(sourceTitle)) {
 		return invalid(
 			"plutus",
 			candidates.length === 0
 				? "Plutus compilation requires one .hs source file in files"
-				: "Plutus compilation requires title when files contains multiple .hs sources",
+				: title
+					? "Plutus compilation title must identify a .hs source in files"
+					: "Plutus compilation requires title when files contains multiple .hs sources",
 			"missing_source",
 		);
 	}
