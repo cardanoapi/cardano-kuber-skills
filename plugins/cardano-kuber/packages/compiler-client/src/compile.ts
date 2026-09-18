@@ -69,15 +69,24 @@ export interface CompileOptions {
 }
 
 export async function compileSource(code: string, opts: CompileOptions): Promise<CompileResult> {
-  const res = await fetch(`${opts.compilerUrl}/api/v3/compile`, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "api-key": opts.apiKey,
-    },
-    body: JSON.stringify({ code }),
-    ...(opts.signal ? { signal: opts.signal } : {}),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${opts.compilerUrl}/api/v3/compile`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "api-key": opts.apiKey,
+      },
+      body: JSON.stringify({ code }),
+      ...(opts.signal ? { signal: opts.signal } : {}),
+    });
+  } catch (error) {
+    if (error instanceof CompilerUnavailableError) {
+      throw error;
+    }
+    const message = error instanceof Error ? error.message : String(error);
+    throw new CompilerUnavailableError(0, `could not reach the Plutus compiler: ${message}`);
+  }
 
   if (!res.ok) {
     // 401 for a bad api key, 5xx for a sick compiler. Neither is the agent's fault and
